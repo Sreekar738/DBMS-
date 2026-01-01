@@ -1,4 +1,4 @@
-drop database if exists telecom;
+
 create database telecom;
 
 use telecom;
