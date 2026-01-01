@@ -1,0 +1,104 @@
+drop database if exists telecom;
+create database telecom;
+
+use telecom;
+
+CREATE TABLE Customer (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(50),
+    phone VARCHAR(15)
+);
+
+CREATE TABLE Plan (
+    plan_id INT PRIMARY KEY,
+    plan_name VARCHAR(50),
+    price DECIMAL(10,2)
+);
+
+CREATE TABLE SIM (
+    sim_id INT PRIMARY KEY,
+    customer_id INT,
+    plan_id INT,
+    status VARCHAR(20),
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+    FOREIGN KEY (plan_id) REFERENCES Plan(plan_id)
+);
+
+CREATE TABLE Bill (
+    bill_id INT PRIMARY KEY,
+    sim_id INT,
+    amount DECIMAL(10,2),
+    payment_status VARCHAR(20),
+    FOREIGN KEY (sim_id) REFERENCES SIM(sim_id)
+);
+
+CREATE TABLE Service_Request (
+    request_id INT PRIMARY KEY,
+    sim_id INT,
+    request_type VARCHAR(50),
+    FOREIGN KEY (sim_id) REFERENCES SIM(sim_id)
+);
+
+
+
+INSERT INTO Customer VALUES
+(1, 'Ravi', '9876543210'),
+(2, 'Sita', '9123456789'),
+(3, 'Ramu', '9123456789'),
+(4, 'Arjun', '9988776655'),
+(5,'Rahul','9876543098');
+select * from Customer;
+
+INSERT INTO Plan VALUES
+(1, 'Basic Plan', 199),
+(2, 'Standard Plan', 399),
+(3, 'Premium Plan', 599),
+(4,'Ultra Premium',699),
+(5,'Small Plan',299);
+
+select * from Plan;
+
+INSERT INTO SIM VALUES
+(101, 1, 1, 'Active'),
+(102, 3, 2, 'Active'),
+(103, 2, 1, 'Inactive'),
+(104, 4, 4, 'Active'),
+(105,5,5,'Inactive');
+select * from SIM;
+INSERT INTO Bill VALUES
+(201, 101, 500, 'PAID'),
+(202, 102, 600, 'UNPAID'),
+(203, 103, 300, 'PAID'),
+(204, 104, 800, 'UNPAID'),
+(205, 105, 100, 'UNPAID');
+select * from Bill;
+INSERT INTO Service_Request VALUES
+(301, 101, 'SIM Replacement'),
+(302, 102, 'Network Issue'),
+(303, 102, 'Billing Query'),
+(304, 104, 'SIM Replacement'),
+(305,105,'Network Issue');
+select * from Service_Request;
+
+
+
+
+SELECT 
+    c.customer_id,
+    c.customer_name,
+    s.sim_id,
+    p.plan_name
+FROM Customer c
+JOIN SIM s ON c.customer_id = s.customer_id
+JOIN Plan p ON s.plan_id = p.plan_id;
+
+
+SELECT 
+    sim_id,
+    customer_id,
+    plan_id,
+    status
+FROM SIM
+WHERE status = 'Active';
+
+
